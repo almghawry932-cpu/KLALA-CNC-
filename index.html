@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b1220"><meta name="description" content="نظام تعليمي عربي لكتابة وفهم ومحاكاة مسارات CNC"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<title>KLALA CNC — الإصدار التجريبي</title>
+<style>
+:root{--bg:#0b1220;--panel:#121d30;--panel2:#18263d;--line:#2a3b56;--text:#edf4ff;--muted:#9fb0c8;--cyan:#46c7df;--green:#54d69a;--orange:#ffbd69}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#0b1220,#101c2e);color:var(--text);font-family:Tahoma,Arial,sans-serif}
+header{padding:22px clamp(16px,4vw,42px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-size:27px;font-weight:800;letter-spacing:1px;color:#fff}.brand span{color:var(--cyan)}.sub{color:var(--muted);font-size:12px;margin-top:5px}.tag{border:1px solid #286477;color:#8ce9f5;border-radius:99px;padding:7px 12px;font-size:12px}
+main{max-width:1200px;margin:auto;padding:24px 16px 48px}.intro{margin-bottom:20px}.intro h1{font-size:clamp(22px,4vw,32px);margin:0 0 8px}.intro p{color:var(--muted);margin:0;line-height:1.8}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}.panel{background:rgba(18,29,48,.96);border:1px solid var(--line);border-radius:16px;padding:16px;min-width:0}.panel h2{font-size:17px;margin:0 0 13px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}button{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer;background:var(--cyan);color:#06202a}button.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}button:active{transform:translateY(1px)}textarea{width:100%;min-height:270px;resize:vertical;background:#08101d;color:#d9f7ff;border:1px solid #2b405d;border-radius:12px;padding:14px;direction:ltr;text-align:left;font:14px/1.8 Consolas,monospace;outline:none}textarea:focus{border-color:var(--cyan)}.hint{color:var(--muted);font-size:12px;line-height:1.7;margin-top:9px}.status{padding:11px 12px;border-radius:10px;background:#0b1727;border:1px solid var(--line);color:var(--muted);font-size:13px;margin-top:12px;line-height:1.7}.status strong{color:var(--green)}
+canvas{width:100%;height:300px;display:block;background:#08101d;border:1px solid #2b405d;border-radius:12px}.legend{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:10px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-left:5px}.explain{display:grid;gap:8px}.item{background:#0b1727;border:1px solid var(--line);border-radius:10px;padding:10px 12px;line-height:1.65}.item b{color:var(--cyan);direction:ltr;display:inline-block}.item small{color:var(--muted);display:block;margin-top:3px}.warning{border-right:3px solid var(--orange);padding:10px 12px;background:#241d17;color:#f6d8b2;border-radius:8px;font-size:12px;line-height:1.8;margin-top:14px}.footer{text-align:center;color:#71839d;font-size:11px;margin-top:22px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.panel{padding:13px}textarea{min-height:230px}canvas{height:260px}}
+</style></head>
+<body>
+<header><div><div class="brand">KLALA <span>CNC</span></div><div class="sub">نظام تعليمي لكتابة وفهم ومحاكاة مسارات CNC</div></div><div class="tag">نسخة تجريبية 0.1 — واجهة عربية</div></header>
+<main>
+<section class="intro"><h1>أهلاً بك في KLALA CNC</h1><p>دي أول نسخة عملية: اكتب برنامجاً بسيطاً، حلّله، وشاهد مسار الحركة على الرسم. نبدأ بأساسيات G-code قبل إضافة الخراطة والتفريز والمحاكاة المتقدمة.</p></section>
+<div class="grid">
+<section class="panel"><h2>① محرر الأكواد</h2><textarea id="code" spellcheck="false">G21
+G90
+G00 X0 Y0
+G01 X40 Y0 F100
+G01 X40 Y30
+G01 X0 Y30
+G01 X0 Y0
+M30</textarea><div class="toolbar"><button id="analyze">تحليل الكود</button><button class="secondary" id="sample">استعادة المثال</button><button class="secondary" id="clear">مسح المحرر</button></div><div class="hint">النسخة الحالية تفهم مبدئياً: G21 وG90 وG00 وG01 وX وY وF وM30. الوحدات هنا مليمتر، والرسم ثنائي الأبعاد للتعلم فقط.</div><div id="status" class="status">جاهز للتحليل. اضغط «تحليل الكود» لعرض النتيجة.</div></section>
+<section class="panel"><h2>② معاينة مسار الأداة (من أعلى)</h2><canvas id="plot" width="700" height="420"></canvas><div class="legend"><span><i class="dot" style="background:#46c7df"></i>حركة سريعة G00</span><span><i class="dot" style="background:#54d69a"></i>حركة قطع G01</span><span><i class="dot" style="background:#ffbd69"></i>نقطة البداية</span></div><div class="hint">الرسم يوضح مسار XY فقط؛ لا يمثل عمق Z أو خامة أو اصطدامات أو حدود ماكينة حقيقية.</div></section>
+<section class="panel" style="grid-column:1/-1"><h2>③ شرح الأوامر المكتشفة</h2><div id="explain" class="explain"><div class="item">لم يتم التحليل بعد.<small>ابدأ بتحليل المثال الموجود في المحرر.</small></div></div></section>
+</div>
+<div class="warning">تنبيه مهم: هذه أداة تعليمية أولية وليست نظام تحكم في ماكينة. لا توصلها بماكينة حقيقية ولا تستخدم ناتجها للتشغيل الفعلي. يلزم لاحقاً إضافة تحقق هندسي ومحاكاة آمنة ومراجعة فني مؤهل قبل أي تشغيل.</div>
+<div class="footer">KLALA CNC © — نبنيها خطوة بخطوة</div>
+</main>
+<script>
+const editor=document.getElementById('code'), statusBox=document.getElementById('status'), explain=document.getElementById('explain'), canvas=document.getElementById('plot'), ctx=canvas.getContext('2d');
+const sample='G21\nG90\nG00 X0 Y0\nG01 X40 Y0 F100\nG01 X40 Y30\nG01 X0 Y30\nG01 X0 Y0\nM30';
+function draw(moves){const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#08101d';ctx.fillRect(0,0,w,h);ctx.strokeStyle='#1c2b40';ctx.lineWidth=1;for(let x=30;x<w;x+=35){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}for(let y=20;y<h;y+=35){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}if(!moves.length)return;let xs=moves.map(p=>p.x),ys=moves.map(p=>p.y),minX=Math.min(0,...xs),maxX=Math.max(1,...xs),minY=Math.min(0,...ys),maxY=Math.max(1,...ys);let pad=55,s=Math.min((w-2*pad)/(maxX-minX||1),(h-2*pad)/(maxY-minY||1));let ox=pad-minX*s,oy=h-pad+minY*s;const pt=p=>({x:ox+p.x*s,y:oy-p.y*s});ctx.lineWidth=3;for(let i=1;i<moves.length;i++){let a=pt(moves[i-1]),b=pt(moves[i]);ctx.strokeStyle=moves[i].mode==='G00'?'#46c7df':'#54d69a';ctx.setLineDash(moves[i].mode==='G00'?[7,6]:[]);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}ctx.setLineDash([]);let first=pt(moves[0]);ctx.fillStyle='#ffbd69';ctx.beginPath();ctx.arc(first.x,first.y,6,0,Math.PI*2);ctx.fill();ctx.fillStyle='#edf4ff';ctx.font='13px Tahoma';ctx.fillText('البداية',first.x+10,first.y-10)}
+function analyze(){let lines=editor.value.split(/\r?\n/),x=0,y=0,mode='G00',moves=[],notes=[],errors=[],unit='غير محددة',absolute=false,feed=null;for(let i=0;i<lines.length;i++){let raw=lines[i].trim().toUpperCase();if(!raw||raw.startsWith('(')||raw.startsWith(';'))continue;let line=raw.replace(/\([^)]*\)/g,'').replace(/;.*$/,'');let codes=line.match(/[A-Z][+-]?(?:\d+(?:\.\d*)?|\.\d+)/g)||[];let hasMotion=false;for(let token of codes){let letter=token[0],val=token.slice(1);if(letter==='G'&&val==='21'){unit='ملليمتر';notes.push(['G21','اختيار نظام الوحدات بالمليمتر.']);}else if(letter==='G'&&val==='20'){unit='بوصة';notes.push(['G20','اختيار نظام الوحدات بالبوصة؛ هذا المثال لا يحوّل القيم تلقائياً.']);}else if(letter==='G'&&val==='90'){absolute=true;notes.push(['G90','الإحداثيات مطلقة: كل X وY يُقاسان من نقطة الصفر.']);}else if(letter==='G'&&val==='91'){absolute=false;notes.push(['G91','الإحداثيات تزايدية: كل حركة تُضاف إلى الموضع الحالي.']);}else if(letter==='G'&&val==='00'){mode='G00';notes.push(['G00','حركة انتقال سريعة، وليست حركة قطع.']);}else if(letter==='G'&&val==='01'){mode='G01';notes.push(['G01','حركة خطية بمعدل التغذية المحدد F.']);}else if(letter==='F'){feed=Number(val);notes.push(['F'+val,'قيمة التغذية المكتوبة في البرنامج.']);}else if(letter==='X'){let n=Number(val);x=absolute?n:x+n;hasMotion=true;}else if(letter==='Y'){let n=Number(val);y=absolute?n:y+n;hasMotion=true;}else if(letter==='Z'){notes.push(['Z'+val,'تم رصد محور Z، لكن هذه النسخة لا ترسم الحركة الرأسية.']);}else if(letter==='M'&&val==='30'){notes.push(['M30','نهاية البرنامج وإعادة مؤشر البرنامج للبداية في كثير من أنظمة التحكم.']);}}
+if(hasMotion)moves.push({x,y,mode,line:i+1});}
+draw(moves);let unique=[];for(let n of notes)if(!unique.some(a=>a[0]===n[0]&&a[1]===n[1]))unique.push(n);explain.innerHTML=unique.length?unique.map(n=>`<div class="item"><b>${n[0]}</b><small>${n[1]}</small></div>`).join(''):'<div class="item">لم يتم التعرف على أوامر مدعومة.<small>جرّب المثال الأساسي.</small></div>';let moveCount=moves.length,cut=moves.filter(m=>m.mode==='G01').length,rapid=moves.filter(m=>m.mode==='G00').length;statusBox.innerHTML=`<strong>اكتمل التحليل المبدئي.</strong><br>الوحدات: ${unit} — وضع الإحداثيات: ${absolute?'مطلق G90':'تزايدي G91'}<br>حركات مرسومة: ${moveCount} — حركات قطع G01: ${cut} — انتقالات G00: ${rapid}${feed!==null?' — آخر تغذية F: '+feed:''}<br><span style="color:#ffbd69">ملاحظة: هذا فحص تعليمي محدود وليس تدقيقاً كاملاً لصحة البرنامج.</span>`;}
+document.getElementById('analyze').onclick=analyze;document.getElementById('sample').onclick=()=>{editor.value=sample;analyze()};document.getElementById('clear').onclick=()=>{editor.value='';draw([]);explain.innerHTML='<div class="item">المحرر فارغ.<small>اكتب أو الصق كوداً ثم حلّله.</small></div>';statusBox.textContent='تم مسح المحرر.'};draw([]);
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+</script>
+</body></html>
